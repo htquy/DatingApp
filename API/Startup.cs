@@ -31,6 +31,7 @@ namespace API
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));//ket noi voi database sqlite va ket noi toi chuoi "DefaultConnection"
             });
             services.AddControllers();// dinh hinh cau hinh cho API
+            services.AddCors();//cho phep su dung chia du lieu tu API server 
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
@@ -50,6 +51,8 @@ namespace API
             app.UseHttpsRedirection();//truy cập và chuyển hướng http đến điểm cuối TPS.
 
             app.UseRouting();//truy cập web qua định tuyến
+            app.UseCors(x=>x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));//cho phep truy cap du lieu tu http://localhost:5193 
+            //toi http://localhost:4200
 
             app.UseAuthorization();// can quyen truy cap?
 
