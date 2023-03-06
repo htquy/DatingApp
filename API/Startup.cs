@@ -13,6 +13,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using API.Data;
 using Microsoft.EntityFrameworkCore;
+using API.interfaces;
+using API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using API.Extensions;
 
 namespace API
 {
@@ -26,12 +32,24 @@ namespace API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {   services.AddApplicationServices(_config);
+            services.AddScoped<ITokenService,TokenService>();
             services.AddDbContext<DataContext> (options => {
                 options.UseSqlite(_config.GetConnectionString("DefaultConnection"));//ket noi voi database sqlite va ket noi toi chuoi "DefaultConnection"
             });
-            services.AddControllers();// dinh hinh cau hinh cho API
+            services.AddControllers();
             services.AddCors();//cho phep su dung chia du lieu tu API server 
+            services.AddIdentityServices(_config);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options=>
+            {
+                options.TokenValidationParameters=new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey=true,
+                    IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokenkey"])),
+                    ValidateIssuer=false,
+                    ValidateAudience=false
+                };
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
@@ -53,8 +71,8 @@ namespace API
             app.UseRouting();//truy cập web qua định tuyến
             app.UseCors(x=>x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));//cho phep truy cap du lieu tu http://localhost:5193 
             //toi http://localhost:4200
-
-            app.UseAuthorization();// can quyen truy cap?
+            app.UseAuthentication();//xac minh quyen truy cap
+            app.UseAuthorization();// uy quyen truy cap
 
             app.UseEndpoints(endpoints =>
             {
