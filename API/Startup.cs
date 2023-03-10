@@ -33,27 +33,14 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {   services.AddApplicationServices(_config);
-            services.AddScoped<ITokenService,TokenService>();
-            services.AddDbContext<DataContext> (options => {
-                options.UseSqlite(_config.GetConnectionString("DefaultConnection"));//ket noi voi database sqlite va ket noi toi chuoi "DefaultConnection"
-            });
+    
             services.AddControllers();
-            services.AddCors();//cho phep su dung chia du lieu tu API server 
-            services.AddIdentityServices(_config);
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options=>
-            {
-                options.TokenValidationParameters=new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey=true,
-                    IssuerSigningKey=new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokenkey"])),
-                    ValidateIssuer=false,
-                    ValidateAudience=false
-                };
-            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
             });
+             services.AddCors();//cho phep su dung chia du lieu tu API server 
+            services.AddIdentityServices(_config);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
