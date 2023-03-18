@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,6 +15,10 @@ import { ListsComponent } from './lists/lists.component';
 import { MessagesComponent } from './messages/messages.component';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from './_modules/shared.module';
+import { TestErrorsComponent } from './errors/test-errors/test-errors.component';
+import { ErrorInterceptor } from './_interceptors/error.interceptor';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { ServerErrorComponent } from './errors/server-error/server-error.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +30,9 @@ import { SharedModule } from './_modules/shared.module';
     MemberDetailComponent,
     MessagesComponent,
     ListsComponent,
+    TestErrorsComponent,
+    NotFoundComponent,
+    ServerErrorComponent,
   ],// cai dat cac component,pipe,dirctive cho chuong trinh
   imports: [
     BrowserModule,
@@ -35,7 +42,9 @@ import { SharedModule } from './_modules/shared.module';
     FormsModule,
     SharedModule
   ],// tap hop cac dodule co kha nang cung cap cho chuong trinh
-  providers: [],//cung cap module(component) de su dung cho chuong trinh khac
+  providers: [
+    {provide:HTTP_INTERCEPTORS,useClass:ErrorInterceptor,multi:true}
+  ],//cung cap module(component) de su dung cho chuong trinh khac
   bootstrap: [AppComponent]
 })
 export class AppModule { }
