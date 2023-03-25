@@ -16,6 +16,7 @@ namespace API.Helpers
             .ForMember(dest=>dest.Age,opt=>opt.MapFrom(src=>src.DateOfBirth.CalculateAge()));
             //anh xa cac thuoc tinh cua AppUser cho MemberDto va thuoc tinh PhotoUrl duoc anh xa tu Photos.Url
             CreateMap<Photo,PhotoDto>();
+            CreateMap<MemberUpdateDto,AppUser>();
         }
     }
 }
