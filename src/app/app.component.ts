@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { User } from './_models/user';
 import { AccountService } from './_services/account.service';
-
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-root',//kich hoat chay code trong mau "app-root"
   templateUrl: './app.component.html',//duong dan URL tuyet doi
