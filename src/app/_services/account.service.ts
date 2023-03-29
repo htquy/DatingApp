@@ -18,8 +18,7 @@ export class AccountService {
       map((response : User)=>{
         const user=response;//phương thức map nhận đối tượng reponse từ serve để gán cho 'user' 
         if(user){
-          localStorage.setItem('user',JSON.stringify(user));//lưu trữ đối tượng 'user' dưới dạng JSON vào localStrorage
-          this.currentUserSource.next(user);//thông báo cho ứng dụng 1 người mới đã đăng nhập
+          this.setCurrentUser(user);
         }
       })
     )
@@ -28,8 +27,7 @@ export class AccountService {
     return this.http.post<User>(this.baseUrl+'account/register',model).pipe(
       map((user : User)=>{
         if(user){
-          localStorage.setItem('user',JSON.stringify(user));
-          this.currentUserSource.next(user);
+          this.setCurrentUser(user);
         }
         return user;
       })
