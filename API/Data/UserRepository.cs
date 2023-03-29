@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
 {
-    public class UserRepository: IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
         public readonly IMapper _mapper; 
@@ -59,5 +59,9 @@ namespace API.Data
             _context.Entry(user).State=EntityState.Modified;
         }
 
+        public Task GetUserByUsernameAsync(object value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
